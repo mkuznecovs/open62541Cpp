@@ -128,3 +128,4 @@ qrc_*.cpp
 *.rc
 /.qmake.cache
 /.qmake.stash
+.vscode/settings.json

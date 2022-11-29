@@ -633,11 +633,11 @@ public:
     */
     bool disconnect()
     {
+        // close subscriptions
+        subscriptions().clear();
         WriteLock l(_mutex);
         if (!_client)
             throw std::runtime_error("Null client");
-        // close subscriptions
-        subscriptions().clear();
         _timerMap.clear();  // remove timer objects
         _lastError      = UA_Client_disconnect(_client);
         _connectionType = ConnectionType::NONE;
