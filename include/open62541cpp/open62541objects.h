@@ -2022,6 +2022,48 @@ public:
     bool browseName(NodeId& n, std::string& s, int& i) { return _obj.browseName(n, s, i); }
 };
 
+class DataValue : private TypeBase<UA_DataValue, 22>
+{
+private:
+    std::mutex rw_mutex;
+
+public:
+    inline void safeAssignFrom(UA_DataValue &dv)
+    {
+        std::lock_guard<std::mutex> lock(rw_mutex);
+        this->assignFrom(dv);
+    }
+
+    template <typename T>
+    T value()
+    {
+        std::lock_guard<std::mutex> lock(rw_mutex);
+        if (!UA_Variant_isEmpty((UA_Variant *)ref()->value.data))
+        {
+            return *((T *)ref()->value.data); // cast to a value - to do Type checking needed
+        }
+        return T();
+    }
+
+    template <typename T>
+    std::vector<T> getVector()
+    {
+        std::lock_guard<std::mutex> lock(rw_mutex);
+        T *x = ((T *)ref()->value.data);
+        std::vector<T> ret;   
+        ret.assign(&x[0], &x[ref()->value.arrayLength]);
+        return ret;
+    }
+
+    template <typename T>
+    T getVectorIndex(size_t key)
+    {
+        std::lock_guard<std::mutex> lock(rw_mutex);
+        // TODO: check if key is not bigger than ref()->value.arrayLength;
+        return ((T *)ref()->value.data)[key];
+    }
+};
+
 // debug helpers
 std::string timestampToString(UA_DateTime date);
 std::string dataValueToString(UA_DataValue* value);

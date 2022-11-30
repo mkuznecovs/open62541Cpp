@@ -414,3 +414,38 @@ std::string Open62541::dataValueToString(UA_DataValue* value)
     os << "Value:" << variantToString(value->value);
     return os.str();
 }
+
+template <>
+std::string Open62541::DataValue::value<std::string>()
+{
+    std::lock_guard<std::mutex> lock(rw_mutex);
+    std::string ret;
+    UA_String *p = (UA_String *)(ref()->value.data);
+    return std::string((const char *)p->data, p->length);
+}
+
+template <>
+std::vector<std::string> Open62541::DataValue::getVector<std::string>()
+{
+    std::lock_guard<std::mutex> lock(rw_mutex);
+    std::vector<std::string> ret;
+
+    UA_String *strings = ((UA_String *)ref()->value.data);
+
+    for (size_t i = 0; i < ref()->value.arrayLength; i++)
+    {
+        ret.push_back(std::string((const char *)strings[i].data, strings[i].length));
+    }
+
+    return ret;
+}
+
+template <>
+std::string Open62541::DataValue::getVectorIndex<std::string>(size_t key)
+{
+    std::lock_guard<std::mutex> lock(rw_mutex);
+
+    UA_String *strings = ((UA_String *)ref()->value.data);
+
+    return std::string((const char *)strings[key].data, strings[key].length);
+}
