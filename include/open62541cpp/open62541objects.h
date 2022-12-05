@@ -2064,6 +2064,16 @@ public:
     }
 };
 
+// Explicit specializations
+template <>
+std::string DataValue::value<std::string>();
+
+template <>
+std::vector<std::string> Open62541::DataValue::getVector<std::string>();
+
+template <>
+std::string Open62541::DataValue::getVectorIndex<std::string>(size_t key);
+
 // debug helpers
 std::string timestampToString(UA_DateTime date);
 std::string dataValueToString(UA_DataValue* value);
