@@ -1021,6 +1021,16 @@ public:
         \brief uaVariant
         \param a
     */
+    Variant(float a)
+        : TypeBase(UA_Variant_new())
+    {
+        UA_Variant_setScalarCopy((UA_Variant*)ref(), &a, &UA_TYPES[UA_TYPES_FLOAT]);
+    }
+
+    /*!
+        \brief uaVariant
+        \param a
+    */
     Variant(double a)
         : TypeBase(UA_Variant_new())
     {
