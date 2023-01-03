@@ -984,6 +984,12 @@ public:
         UA_Variant_setScalarCopy((UA_Variant*)ref(), &v, &UA_TYPES[UA_TYPES_UINT16]);
     }
 
+    Variant(UA_Int16 v)
+        : TypeBase(UA_Variant_new())
+    {
+        UA_Variant_setScalarCopy((UA_Variant*)ref(), &v, &UA_TYPES[UA_TYPES_INT16]);
+    }
+
     Variant(UA_Byte v)
         : TypeBase(UA_Variant_new())
     {

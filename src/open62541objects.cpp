@@ -63,6 +63,10 @@ void Open62541::Variant::fromAny(boost::any& a)
         short v = short(boost::any_cast<char>(a));
         UA_Variant_setScalarCopy((UA_Variant*)ref(), &v, &UA_TYPES[UA_TYPES_INT16]);
     }
+    else if (t == typeid(int16_t).hash_code()) {
+        short v = short(boost::any_cast<char>(a));
+        UA_Variant_setScalarCopy((UA_Variant*)ref(), &v, &UA_TYPES[UA_TYPES_INT16]);
+    }
     else if (t == typeid(bool).hash_code()) {
         bool v = boost::any_cast<bool>(a);
         UA_Variant_setScalarCopy((UA_Variant*)ref(), &v, &UA_TYPES[UA_TYPES_BOOLEAN]);
