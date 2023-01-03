@@ -152,8 +152,7 @@ public:
         auto pdc     = new T(f, *this);
         if (pdc->addDataChange(n)) {  // make it notify on data change
             Open62541::MonitoredItemRef mcd(pdc);
-            ret = mcd.get()->id();
-            addMonitorItem(mcd);  // add to subscription set
+            ret = addMonitorItem(mcd);  // add to subscription set
         }
         else {
             delete pdc;
